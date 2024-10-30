@@ -87,8 +87,7 @@ The following DAX queries were created in Power BI to further analyze and segmen
 AgeGroup
 
 Classifies customers into age groups:
-
-
+```
 AgeGroup = SWITCH(TRUE(),
 
                 customer[Customer_Age]<30,"20-30", 
@@ -106,4 +105,5 @@ AgeGroup = SWITCH(TRUE(),
                 "Unknown"
                 
                 )
+```
 
