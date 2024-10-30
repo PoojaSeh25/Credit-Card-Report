@@ -89,12 +89,20 @@ AgeGroup
 Classifies customers into age groups:
 
 AgeGroup = SWITCH(TRUE(),
+
                 customer[Customer_Age]<30,"20-30", 
+                
                 customer[Customer_Age] >= 30 && customer[Customer_Age] < 40, "30-40", 
+                
                 customer[Customer_Age] >= 40 && customer[Customer_Age] < 50, "40-50",
+                
                 customer[Customer_Age] >= 50 && customer[Customer_Age] < 60, "50-60",
+                
                 customer[Customer_Age] >= 60 && customer[Customer_Age] < 70, "60-70",
+                
                 customer[Customer_Age] >= 70, "70+",
+                
                 "Unknown"
+                
                 )
 
