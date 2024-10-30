@@ -214,3 +214,50 @@ SELECT Client_Num, Customer_Age, Gender, Dependent_Count, Education_Level,
        Personal_loan, contact, Customer_Job, Income, Cust_Satisfaction_Score
 FROM cust_add;
 ```
+# Dashboard Summary
+
+# Key Metrics
+
+1. Revenue: Total revenue generated from credit card transactions, amounting to 57M.
+   
+2. Transaction Amount: The cumulative amount spent using credit cards, totaling 46M.
+   
+3. Total Count: Total number of transactions recorded, amounting to 667K.
+   
+4. Total Interest: Total interest earned from credit card usage, amounting to 8.0M.
+
+# Features & Filters
+
+1. Filters: Interactive filters for Week_Start_Date, Gender (F/M), Quarter (Q1-Q4), and Card Category (Gold, Silver, Blue, Platinum).
+
+2. Dynamic Visualizations: Includes bar and pie charts that dynamically update based on filter selection, providing deeper insights into segmented data.
+
+# Visualizations
+
+1. Quarterly Revenue & Transaction Count: Highlights revenue and transaction count per quarter, indicating a steady increase across Q1 to Q4.
+
+2. Card Category Summary: Breakdown of revenue, transaction amount, and interest earned across card categories.
+
+3. Revenue by Expenditure Type: Analysis of spending categories, such as Bills, Entertainment, and Fuel, where "Bills" leads with the highest revenue.
+
+4. Revenue by Customer Job: Identifies customer jobs contributing the most to revenue, with "Businessman" at the top.
+
+5. Revenue by Education Level: Analyzes revenue contribution based on education level, where "Graduate" customers generate the highest revenue.
+
+6. Card Usage (Chip/Swipe/Online): Distribution of revenue by transaction type, indicating "Swipe" as the most preferred mode.
+
+# Insights
+
+1. Quarterly Performance: A consistent rise in revenue and transaction count from Q1 to Q4 suggests increased card usage over time.
+
+2. Customer Demographics: Business professionals and graduates generate the highest revenue, reflecting a high credit usage in these segments.
+
+3. Expenditure Type: Bills and entertainment are the primary areas where customers utilize credit cards, indicating potential areas for targeted offers.
+
+4. Card Usage Patterns: Swipe transactions dominate, followed by Chip usage, suggesting a preference for physical over online transactions.
+
+# Conclusion
+
+This dashboard offers a comprehensive view of credit card transaction data, enabling data-driven decisions to optimize credit offerings, tailor marketing strategies, and enhance customer satisfaction. By focusing on high-revenue demographics and expenditure types, businesses can leverage this data for improved customer engagement and revenue growth.
+
+
