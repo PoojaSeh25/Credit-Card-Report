@@ -10,81 +10,81 @@ To develop a comprehensive credit card weekly dashboard that provides real-time 
 
 The customer table holds customer-specific details:
 
-Client_Num: Unique identifier for each customer.
+1. Client_Num: Unique identifier for each customer.
 
-Customer_Age: Age of the customer.
+2. Customer_Age: Age of the customer.
 
-Gender: Customer’s gender.
+3. Gender: Customer’s gender.
 
-Dependent_Count: Number of dependents for each customer.
+4. Dependent_Count: Number of dependents for each customer.
 
-Education_Level: Customer’s highest education level.
+5. Education_Level: Customer’s highest education level.
 
-Marital_Status: Marital status of the customer.
+6. Marital_Status: Marital status of the customer.
 
-state_cd: State code representing customer’s location.
+7. state_cd: State code representing customer’s location.
 
-Zipcode: Customer’s residential postal code.
+8. Zipcode: Customer’s residential postal code.
 
-Car_Owner: Indicates if the customer owns a car (Yes/No).
+9. Car_Owner: Indicates if the customer owns a car (Yes/No).
 
-House_Owner: Indicates if the customer owns a house (Yes/No).
+10. House_Owner: Indicates if the customer owns a house (Yes/No).
 
-Personal_loan: Indicates if the customer has a personal loan.
+11. Personal_loan: Indicates if the customer has a personal loan.
 
-contact: Contact preference or status of the customer.
+12. contact: Contact preference or status of the customer.
 
-Customer_Job: Job type or title of the customer.
+13. Customer_Job: Job type or title of the customer.
 
-Income: Annual income of the customer.
+14. Income: Annual income of the customer.
 
-Cust_Satisfaction_Score: Satisfaction score based on customer feedback.
+15. Cust_Satisfaction_Score: Satisfaction score based on customer feedback.
 
 # 2. Credit Card Table (credit_card)
 
 The credit_card table holds transaction and financial details for each customer:
 
-Client_Num: Unique identifier that links to customer table.
+1. Client_Num: Unique identifier that links to customer table.
 
-Card_Category: Category/type of the credit card.
+2. Card_Category: Category/type of the credit card.
 
-Annual_Fees: Annual fee associated with the card.
+3. Annual_Fees: Annual fee associated with the card.
 
-Activation_30_Days: Indicates if the card was activated within 30 days.
+4. Activation_30_Days: Indicates if the card was activated within 30 days.
 
-Customer_Acq_Cost: Cost to acquire the customer.
+5. Customer_Acq_Cost: Cost to acquire the customer.
 
-Week_Start_Date: Start date of the week for transaction records.
+6. Week_Start_Date: Start date of the week for transaction records.
 
-Week_Num: Week number in the calendar year.
+7. Week_Num: Week number in the calendar year.
 
-Qtr: Financial quarter.
+8. Qtr: Financial quarter.
 
-current_year: Current year of transaction.
+9. current_year: Current year of transaction.
 
-Credit_Limit: Credit limit on the card.
+10. Credit_Limit: Credit limit on the card.
 
-Total_Revolving_Bal: Total revolving balance on the card.
+11. Total_Revolving_Bal: Total revolving balance on the card.
 
-Total_Trans_Amt: Total transaction amount for the week.
+12. Total_Trans_Amt: Total transaction amount for the week.
 
-Total_Trans_Vol: Total volume of transactions for the week.
+13. Total_Trans_Vol: Total volume of transactions for the week.
 
-Avg_Utilization_Ratio: Average utilization ratio of the card.
+14. Avg_Utilization_Ratio: Average utilization ratio of the card.
 
-Use Chip: Indicates if a chip was used in transactions.
+15. Use Chip: Indicates if a chip was used in transactions.
 
-Exp Type: Expenditure type/category.
+16. Exp Type: Expenditure type/category.
 
-Interest_Earned: Interest earned on the card balance.
+17. Interest_Earned: Interest earned on the card balance.
 
-Delinquent_Acc: Number of delinquent accounts.
+18. Delinquent_Acc: Number of delinquent accounts.
 
 # DAX Calculations in Power BI
 
 The following DAX queries were created in Power BI to further analyze and segment data:
 
-AgeGroup
+1. AgeGroup
 
 Classifies customers into age groups:
 ```
@@ -107,3 +107,110 @@ AgeGroup = SWITCH(TRUE(),
                 )
 ```
 
+2. IncomeGroup
+   
+Classifies customers by income:
+
+```
+IncomeGroup = SWITCH(
+                     TRUE(),
+                     customer[Income] < 35000, "Low",
+                     customer[Income] >= 35000 && customer[Income] <70000, "Medium",
+                     customer[Income] >=70000, "High",
+                     "Unknown"
+                    )
+```
+
+3. Revenue Calculations
+
+a. week_num2: Extracts the week number from Week_Start_Date
+
+```
+Week_num2 = WEEKNUM(credit_card[Week_Start_Date])
+```
+
+b. Revenue: Calculates total revenue based on various card-related metrics
+
+```
+Revenue = credit_card[Annual_Fees] +credit_card[Total_Trans_Amt] +credit_card[Interest_Earned]
+```
+
+c. Current_week_Revenue and Previous_week_Revenue: Compares weekly revenue
+
+```
+Current_Week_Revenue = CALCULATE(
+    SUM(credit_card[Revenue]),
+    FILTER(
+        ALL(credit_card),
+        credit_card[Week_num2] = 
+        MAX(credit_card[Week_Num2])))
+```
+```
+Previous_Week_Revenue = CALCULATE(
+    SUM(credit_card[Revenue]),
+    FILTER(
+        ALL(credit_card),
+        credit_card[Week_num2] = MAX(credit_card[Week_Num2])-1))
+```
+
+# SQL Server Updates and Data Preparation
+
+# Credit Card Table
+
+To prepare and update data in the credit_card table for weekly analysis:
+
+```
+-- Sample data retrieval
+SELECT * FROM credit_card;
+SELECT * FROM cc_add;
+
+-- Change Qtr column data type to VARCHAR
+ALTER TABLE credit_card ALTER COLUMN Qtr VARCHAR(50);
+
+-- Change other columns as needed
+ALTER TABLE credit_card ALTER COLUMN Annual_Fees INT;
+ALTER TABLE credit_card ALTER COLUMN Total_Revolving_Bal INT;
+ALTER TABLE credit_card ALTER COLUMN Total_Trans_Amt INT;
+
+-- Update Qtr column values
+UPDATE credit_card
+SET Qtr = 
+    CASE 
+        WHEN CAST(Qtr AS DECIMAL(3, 0)) = 1 THEN 'Q1'
+        WHEN CAST(Qtr AS DECIMAL(3, 0)) = 2 THEN 'Q2'
+        WHEN CAST(Qtr AS DECIMAL(3, 0)) = 3 THEN 'Q3'
+        WHEN CAST(Qtr AS DECIMAL(3, 0)) = 4 THEN 'Q4'
+        ELSE Qtr
+    END;
+
+-- Rename Total_Trans_Vol column
+EXEC sp_rename 'credit_card.Total_Trans_Vol', 'Total_Trans_Ct', 'COLUMN';
+
+-- Insert new records from `cc_add` into `credit_card`
+INSERT INTO credit_card (Client_Num, Card_Category, Annual_Fees, Activation_30_Days, Customer_Acq_Cost, Week_Start_Date, Week_Num, 
+    Qtr, current_year, Credit_Limit, Total_Revolving_Bal, 
+    Total_Trans_Amt, Total_Trans_Ct, Avg_Utilization_Ratio, Use_Chip, Exp_Type, Interest_Earned, Delinquent_Acc)
+SELECT Client_Num, Card_Category, Annual_Fees, Activation_30_Days, Customer_Acq_Cost, Week_Start_Date, Week_Num, 
+    Qtr, current_year, Credit_Limit, Total_Revolving_Bal, 
+    Total_Trans_Amt, Total_Trans_Ct, Avg_Utilization_Ratio, Use_Chip, Exp_Type, Interest_Earned, Delinquent_Acc
+FROM cc_add;
+```
+
+# Customer Table
+
+To update the customer table with new data:
+
+```
+-- Retrieve data from `customer` and `cust_add`
+SELECT * FROM customer;
+SELECT * FROM cust_add;
+
+-- Insert new records from `cust_add` into `customer`
+INSERT INTO customer (Client_Num, Customer_Age, Gender, Dependent_Count, Education_Level, 
+                         Marital_Status, state_cd, Zipcode, Car_Owner, House_Owner, 
+                         Personal_loan, contact, Customer_Job, Income, Cust_Satisfaction_Score)
+SELECT Client_Num, Customer_Age, Gender, Dependent_Count, Education_Level, 
+       Marital_Status, state_cd, Zipcode, Car_Owner, House_Owner, 
+       Personal_loan, contact, Customer_Job, Income, Cust_Satisfaction_Score
+FROM cust_add;
+```
