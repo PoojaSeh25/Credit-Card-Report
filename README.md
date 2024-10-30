@@ -6,7 +6,7 @@ Weekly Status Report
 To develop a comprehensive credit card weekly dashboard that provides real-time insights into key performance metrics and trends, enabling stakeholders to monitor and analyze credit card operations effectively.
 
 # Table Structures
-1. Customer Table (customer)
+# 1. Customer Table (customer)
 
 The customer table holds customer-specific details:
 
@@ -79,3 +79,22 @@ Exp Type: Expenditure type/category.
 Interest_Earned: Interest earned on the card balance.
 
 Delinquent_Acc: Number of delinquent accounts.
+
+# DAX Calculations in Power BI
+
+The following DAX queries were created in Power BI to further analyze and segment data:
+
+AgeGroup
+
+Classifies customers into age groups:
+
+AgeGroup = SWITCH(TRUE(),
+                customer[Customer_Age]<30,"20-30", 
+                customer[Customer_Age] >= 30 && customer[Customer_Age] < 40, "30-40", 
+                customer[Customer_Age] >= 40 && customer[Customer_Age] < 50, "40-50",
+                customer[Customer_Age] >= 50 && customer[Customer_Age] < 60, "50-60",
+                customer[Customer_Age] >= 60 && customer[Customer_Age] < 70, "60-70",
+                customer[Customer_Age] >= 70, "70+",
+                "Unknown"
+                )
+
