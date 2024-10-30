@@ -88,6 +88,7 @@ AgeGroup
 
 Classifies customers into age groups:
 
+
 AgeGroup = SWITCH(TRUE(),
 
                 customer[Customer_Age]<30,"20-30", 
